@@ -109,6 +109,7 @@ img {
     border-radius: 3px;
     box-shadow: 0 0 10px 2px #3333331a;
     overflow: hidden;
+    cursor: pointer;
 }
 
  .meal-header {
@@ -151,4 +152,47 @@ img {
 
  .meal-body .fav-btn.active {
      color: rebeccapurple;
+ }
+
+ .popup-container {
+    position: fixed;
+    background-color: rgba(0, 0, 0, .5);
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ }
+
+ .popup-container.hidden {
+     opacity: 0;
+     pointer-events: none;
+ }
+
+ .popup {
+     background-color: #fff;
+     padding: 0 2rem;
+     border-radius: 5px;
+     max-height: 90vh;
+     max-width: 600px;
+     overflow: auto;
+     width: 100%;
+     position: relative;
+ }
+
+ .popup h1 {
+     text-align: center;
+ }
+
+ .popup .close-popup {
+     background-color: transparent;
+     color: #f00;
+     font-size: 1.5rem;
+     cursor: pointer;
+     border: none;
+     position: absolute;
+     top: 1rem;
+     right: 1rem;
  }
