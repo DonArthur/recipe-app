@@ -64,9 +64,27 @@ img {
  }
 
  .fav-meals li {
+     position: relative;
     width: 75px;
     margin: 5px;
+    cursor: pointer;
  }
+
+ .fav-meals li .clear {
+     background-color: transparent;
+     position: absolute;
+     top: -.25rem;
+     right: -.25rem;
+     opacity: 0;
+     border: none;
+     color: #f00;
+     font-size: 1.2rem;
+     cursor: pointer;
+ }
+
+.fav-meals li:hover .clear {
+    opacity: 1;
+}
 
  .fav-meals li img {
      object-fit: cover;
@@ -79,6 +97,11 @@ img {
 
  .fav-meals li span {
      font-size: .9rem;
+     display: inline-block;
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     width: 75px;
  }
 
  .meal {

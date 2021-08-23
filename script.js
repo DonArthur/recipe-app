@@ -1,5 +1,8 @@
-const meals = document.getElementById('meals')
+const mealsElement = document.getElementById('meals')
 const favoriteContainer = document.getElementById('fav-meals')
+
+const searchTerm = document.getElementById('search-term')
+const searchBtn = document.getElementById('search')
 
 getRandomMeal()
 fetchFavMeals()
@@ -19,7 +22,10 @@ async function getMealById(id) {
 }
 
 async function getMealBySearch(query) {
-    const meals = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=' + query)
+    const response = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=' + query)
+    const data = await response.json()
+    const meals = data.meals
+    return meals
 }
 
 function addMeal(mealData, random = false) {
@@ -44,7 +50,6 @@ function addMeal(mealData, random = false) {
             addMealsToLocalStorage(mealData.idMeal)
             favBtn.classList.add('active')
         }
-        favoriteContainer.innerHTML = ''
         fetchFavMeals()
     })
     meals.appendChild(meal)
@@ -66,6 +71,7 @@ function getMealsFromLocalStorage() {
 }
 
 async function fetchFavMeals() {
+    favoriteContainer.innerHTML = ''
     const mealIds = getMealsFromLocalStorage()
     for (let i = 0; i < mealIds.length; i++) {
         const mealId = mealIds[i]
@@ -76,6 +82,38 @@ async function fetchFavMeals() {
 
 function addMealToFav(mealData) {
     const favMeal = document.createElement('li')
-    favMeal.innerHTML = `<img src="${mealData.strMealThumb}" alt="${mealData.strMeal}"><span>${mealData.strMeal}</span>`
+    favMeal.innerHTML = `
+                        <img src="${mealData.strMealThumb}" alt="${mealData.strMeal}"><span>${mealData.strMeal}</span>
+                        <button class="clear"><i class="fas fa-window-close"></i></button>
+                        `
+    const btn = favMeal.querySelector('.clear')
+    btn.addEventListener('click', () => {
+        removeMealFromLocalStorage(mealData.idMeal)
+        fetchFavMeals()
+    })
     favoriteContainer.appendChild(favMeal)
 }
+
+searchBtn.addEventListener('click', async () => {
+    mealsElement.innerHTML = ''
+    const search = searchTerm.value
+    const meals = await getMealBySearch(search)
+    if (meals) {
+        meals.forEach(meal => {
+            addMeal(meal)
+        })            
+    }
+})
+
+searchTerm.addEventListener('keypress', async (e) => {
+    if (e.key === 'Enter') {
+        mealsElement.innerHTML = ''
+        const search = searchTerm.value
+        const meals = await getMealBySearch(search)
+        if (meals) {
+            meals.forEach(meal => {
+                addMeal(meal)
+            })            
+        }            
+    }
+})
